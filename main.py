@@ -67,7 +67,7 @@ async def api_insert_summary_log(insert_summary_log_dto: InsertSummaryLog) -> Ba
         return BaseResponseDto.failed(msg=str(e))
 
 if __name__ == "__main__":
-    database = Database(test_environment=True)
+    database = Database(test_environment=False)
     uvicorn.run(
         app,
         host="0.0.0.0",
