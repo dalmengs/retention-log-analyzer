@@ -52,6 +52,45 @@ async def api_insert_performance_log(insert_performance_log_dto: InsertPerforman
     except Exception as e:
         return BaseResponseDto.failed(msg=str(e))
 
+@app.post(PREFIX + "/performances")
+async def api_insert_performance_log(insert_performance_log_dto: InsertPerformancesLog) -> BaseResponseDto:
+    try:
+        database.insert_performance_log(
+            request_id=insert_performance_log_dto.request_id,
+            session_id=insert_performance_log_dto.session_id,
+            user_id=insert_performance_log_dto.user_id,
+            component_id=0,
+            data=None,
+            execution_time=insert_performance_log_dto.main_chain_time
+        )
+        database.insert_performance_log(
+            request_id=insert_performance_log_dto.request_id,
+            session_id=insert_performance_log_dto.session_id,
+            user_id=insert_performance_log_dto.user_id,
+            component_id=1,
+            data=insert_performance_log_dto.retrieval_result,
+            execution_time=insert_performance_log_dto.rag_time
+        )
+        database.insert_performance_log(
+            request_id=insert_performance_log_dto.request_id,
+            session_id=insert_performance_log_dto.session_id,
+            user_id=insert_performance_log_dto.user_id,
+            component_id=2,
+            data=insert_performance_log_dto.inference_result,
+            execution_time=insert_performance_log_dto.inference_time
+        )
+        database.insert_performance_log(
+            request_id=insert_performance_log_dto.request_id,
+            session_id=insert_performance_log_dto.session_id,
+            user_id=insert_performance_log_dto.user_id,
+            component_id=3,
+            data=None,
+            execution_time=insert_performance_log_dto.tts_time
+        )
+        return BaseResponseDto.ok()
+    except Exception as e:
+        return BaseResponseDto.failed(msg=str(e))
+
 @app.post(PREFIX + "/summary")
 async def api_insert_summary_log(insert_summary_log_dto: InsertSummaryLog) -> BaseResponseDto:
     try:
@@ -59,6 +98,34 @@ async def api_insert_summary_log(insert_summary_log_dto: InsertSummaryLog) -> Ba
             session_id=insert_summary_log_dto.session_id,
             summary=insert_summary_log_dto.summary,
             summary_type=insert_summary_log_dto.summary_type,
+            user_id=insert_summary_log_dto.user_id,
+            created_at=insert_summary_log_dto.created_at
+        )
+        return BaseResponseDto.ok()
+    except Exception as e:
+        return BaseResponseDto.failed(msg=str(e))
+
+@app.post(PREFIX + "/summaries")
+async def api_insert_summary_log(insert_summary_log_dto: InsertSummariesLog) -> BaseResponseDto:
+    try:
+        database.insert_summary_log(
+            session_id=insert_summary_log_dto.session_id,
+            summary=insert_summary_log_dto.front_summary,
+            summary_type=0,
+            user_id=insert_summary_log_dto.user_id,
+            created_at=insert_summary_log_dto.created_at
+        )
+        database.insert_summary_log(
+            session_id=insert_summary_log_dto.session_id,
+            summary=insert_summary_log_dto.back_summary,
+            summary_type=1,
+            user_id=insert_summary_log_dto.user_id,
+            created_at=insert_summary_log_dto.created_at
+        )
+        database.insert_summary_log(
+            session_id=insert_summary_log_dto.session_id,
+            summary=insert_summary_log_dto.nalytic_summary,
+            summary_type=2,
             user_id=insert_summary_log_dto.user_id,
             created_at=insert_summary_log_dto.created_at
         )
