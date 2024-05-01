@@ -48,8 +48,8 @@ class InsertSummaryLog(BaseModel):
 
 class InsertSummariesLog(BaseModel):
     session_id: str
-    front_summary: str
-    back_summary: str
+    front_summary: list
+    back_summary: list
     nalytic_summary: str
     user_id: str
     created_at: str

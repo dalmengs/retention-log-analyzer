@@ -108,20 +108,22 @@ async def api_insert_summary_log(insert_summary_log_dto: InsertSummaryLog) -> Ba
 @app.post(PREFIX + "/summaries")
 async def api_insert_summary_log(insert_summary_log_dto: InsertSummariesLog) -> BaseResponseDto:
     try:
-        database.insert_summary_log(
-            session_id=insert_summary_log_dto.session_id,
-            summary=insert_summary_log_dto.front_summary,
-            summary_type=0,
-            user_id=insert_summary_log_dto.user_id,
-            created_at=insert_summary_log_dto.created_at
-        )
-        database.insert_summary_log(
-            session_id=insert_summary_log_dto.session_id,
-            summary=insert_summary_log_dto.back_summary,
-            summary_type=1,
-            user_id=insert_summary_log_dto.user_id,
-            created_at=insert_summary_log_dto.created_at
-        )
+        for front_summary in insert_summary_log_dto.front_summary:
+            database.insert_summary_log(
+                session_id=insert_summary_log_dto.session_id,
+                summary=front_summary,
+                summary_type=0,
+                user_id=insert_summary_log_dto.user_id,
+                created_at=insert_summary_log_dto.created_at
+            )
+        for back_summary in insert_summary_log_dto.back_summary:
+            database.insert_summary_log(
+                session_id=insert_summary_log_dto.session_id,
+                summary=back_summary,
+                summary_type=1,
+                user_id=insert_summary_log_dto.user_id,
+                created_at=insert_summary_log_dto.created_at
+            )
         database.insert_summary_log(
             session_id=insert_summary_log_dto.session_id,
             summary=insert_summary_log_dto.nalytic_summary,
